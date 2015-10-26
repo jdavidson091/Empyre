@@ -92,39 +92,62 @@ auth.settings.reset_password_requires_verification = True
 # auth.enable_record_versioning(db)
 
 
-db.define_table('player_avatar',
-    Field('name'),
+db.define_table('game_board',
+    Field('values', 'string'),
+    Field('user1', 'reference user_profile'),
+    Field('user2', 'reference user_profile'),
+    Field('user1_words', 'list:string'),
+    Field('user2_words', 'list:string'),
+    Field('user1_score', 'integer'),
+    Field('user2_score', 'integer'),
 
+    )
+
+#don't implement time left to play initially
+db.define_table('pythoggle_match',
+    Field('created_on', 'datetime', default=request.now),
+    Field('current_game_board', 'reference game_board'),
+    Field('players_played_this_round', 'list:reference user_profile'),
+    Field('round', 'integer', default=1),
+    Field('finished', 'boolean', default=False),
+    )
+
+db.define_table('user_profile',
+    Field('username', 'string'),
+    Field('current_matches', 'list:reference pythoggle_match'),
+    Field('old_matches', 'list:reference pythoggle_match'),
+    Field('user_image', 'upload'),
+    Field('high_score', 'integer', default=0)
     )
 
 
 
-db.define_table('recipe',
-   Field('name'),
-   Field('ingredients', 'text'),
-   Field('instructions', 'text'),
-   Field('image', 'upload'),
-   Field('rating','double',writable=False,readable=False),
-   Field('created_on', 'datetime', default=request.now),
-   Field('created_by', 'reference auth_user', default=auth.user_id), format = '%(name)s')
-
-db.define_table('comment',
-   Field('recipe_id'),
-   Field('comment', 'text'),
-   Field('created_on', 'datetime', default=request.now),
-   Field('author', 'reference auth_user', default=auth.user_id), format = '%(name)s')
-
-db.define_table('vote',
-    Field('recipe','reference recipe'),
-    Field('rating','double'))
-
-db.recipe.name.requires = IS_NOT_IN_DB(db, db.recipe.name)
-db.recipe.ingredients.requires = IS_NOT_EMPTY()
-db.recipe.instructions.requires = IS_NOT_EMPTY()
-
-db.comment.recipe_id.requires = IS_IN_DB(db, db.recipe.id, '%(name)s')
-db.comment.author.requires = IS_IN_DB(db, db.auth_user.id, '%(name)s')
-db.comment.author.requires = IS_NOT_EMPTY()
-db.comment.comment.requires = IS_NOT_EMPTY()
-
-db.comment.recipe_id.writable = db.comment.recipe_id.readable = False
+# db.define_table('recipe',
+#    Field('name'),
+#    Field('ingredients', 'text'),
+#    Field('instructions', 'text'),
+#    Field('image', 'upload'),
+#    Field('rating','double',writable=False,readable=False),
+#    Field('created_on', 'datetime', default=request.now),
+#    Field('created_by', 'reference auth_user', default=auth.user_id), format = '%(name)s')
+#
+# db.define_table('comment',
+#    Field('recipe_id'),
+#    Field('comment', 'text'),
+#    Field('created_on', 'datetime', default=request.now),
+#    Field('author', 'reference auth_user', default=auth.user_id), format = '%(name)s')
+#
+# db.define_table('vote',
+#     Field('recipe','reference recipe'),
+#     Field('rating','double'))
+#
+# db.recipe.name.requires = IS_NOT_IN_DB(db, db.recipe.name)
+# db.recipe.ingredients.requires = IS_NOT_EMPTY()
+# db.recipe.instructions.requires = IS_NOT_EMPTY()
+#
+# db.comment.recipe_id.requires = IS_IN_DB(db, db.recipe.id, '%(name)s')
+# db.comment.author.requires = IS_IN_DB(db, db.auth_user.id, '%(name)s')
+# db.comment.author.requires = IS_NOT_EMPTY()
+# db.comment.comment.requires = IS_NOT_EMPTY()
+#
+# db.comment.recipe_id.writable = db.comment.recipe_id.readable = False
