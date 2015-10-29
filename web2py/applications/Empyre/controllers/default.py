@@ -1,23 +1,37 @@
 # -*- coding: utf-8 -*-
-# this file is released under public domain and you can use without limitations
 
-#########################################################################
-## This is a sample controller
-## - index is the default action of any application
-## - user is required for authentication and authorization
-## - download is for downloading files uploaded in the db (does streaming)
-#########################################################################
 
 def index():
-    """
-    example action using the internationalization operator T and flash
-    rendered by views/default/index.html or views/generic.html
-
-    if you need a simple wiki simply replace the two lines below with:
-    return auth.wiki()
-    """
     response.flash = T("Hello World")
-    return dict(message=T('Welcome to web2py!'))
+    return dict(message=T(''))
+
+
+
+def find_new_opponents():
+    response.flash = T("find new opponents screen")
+    return dict()
+
+
+def current_games():
+    response.flash = T("current games")
+    return dict()
+
+
+def past_games():
+    response.flash = T("past games")
+    return dict()
+
+
+# TODO: have 'game' screen be in a different controller/view?
+
+def high_scores():
+    response.flash = "high score screen"
+    return dict()
+
+
+def rules():
+    response.flash = "rules screen, have pictures as well"
+    return dict()
 
 
 def user():
