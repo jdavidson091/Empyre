@@ -1,11 +1,27 @@
 # -*- coding: utf-8 -*-
 
 
+"""
+This is the default view, which users are redirected to if not logged in.
+TODO:
+    present a quick introduction about the site. Scroll down?
+    Link to sign in.
+    EXTRA: facebook/twitter sign-in link.
+"""
 def index():
-    response.flash = T("Hello World")
-    return dict(message=T(''))
+    response.flash = T("YO WHAT UP")
+    return dict(message=T('This is the default index page.'))
 
 
+
+
+"""
+This is the users' homepage, displaying:
+
+"""
+def home():
+    response.flash = "Home Screen"
+    return dict()
 
 def find_new_opponents():
     response.flash = T("find new opponents screen")

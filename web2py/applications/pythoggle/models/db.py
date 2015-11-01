@@ -90,10 +90,17 @@ auth.settings.reset_password_requires_verification = True
 
 ## after defining tables, uncomment below to enable auditing
 # auth.enable_record_versioning(db)
+db.define_table('user_profile',
+    Field('username', 'string'),
+    Field('current_matches', 'list:reference pythoggle_match', default=[]),
+    Field('old_matches', 'list:reference pythoggle_match', default=[]),
+    Field('user_image', 'upload'),
+    Field('high_score', 'integer', default=0)
+    )
 
 
 db.define_table('game_board',
-    Field('values', 'string'),
+    Field('board_values', 'string'),
     Field('user1', 'reference user_profile'),
     Field('user2', 'reference user_profile'),
     Field('user1_words', 'list:string'),
@@ -108,17 +115,10 @@ db.define_table('pythoggle_match',
     Field('created_on', 'datetime', default=request.now),
     Field('current_game_board', 'reference game_board'),
     Field('players_played_this_round', 'list:reference user_profile'),
-    Field('round', 'integer', default=1),
+    Field('current_round', 'integer', default=1),
     Field('finished', 'boolean', default=False),
     )
 
-db.define_table('user_profile',
-    Field('username', 'string'),
-    Field('current_matches', 'list:reference pythoggle_match'),
-    Field('old_matches', 'list:reference pythoggle_match'),
-    Field('user_image', 'upload'),
-    Field('high_score', 'integer', default=0)
-    )
 
 
 
