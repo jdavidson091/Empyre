@@ -1,0 +1,26 @@
+{{extend 'layout.html'}}
+
+{{if 'message' in globals():}}
+<h2>{{=message}}</h2>
+{{pass}}
+
+<a class="btn btn-primary"
+   href="{{=URL('high_scores')}}">high_scores</a>
+<a class="btn btn-primary"
+   href="{{=URL('current_games')}}">current_games</a>
+<a class="btn btn-primary"
+   href="{{=URL('find_new_opponents')}}">find_new_opponents</a>
+<a class="btn btn-primary"
+   href="{{=URL('past_games')}}">past_games</a>
+<a class="btn btn-primary"
+   href="{{=URL('rules')}}">rules</a>
+<a class="btn btn-primary"
+   href="{{=URL('user')}}">user</a>
+
+
+
+{{if 'content' in globals():}}
+{{=content}}
+{{else:}}
+{{=BEAUTIFY(response._vars)}}
+{{pass}}

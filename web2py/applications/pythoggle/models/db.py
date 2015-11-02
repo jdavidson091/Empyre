@@ -92,10 +92,11 @@ auth.settings.reset_password_requires_verification = True
 # auth.enable_record_versioning(db)
 db.define_table('user_profile',
     Field('username', 'string'),
+    Field('auth_user_id', 'integer', default=0),
     Field('current_matches', 'list:reference pythoggle_match', default=[]),
     Field('old_matches', 'list:reference pythoggle_match', default=[]),
     Field('user_image', 'upload'),
-    Field('high_score', 'integer', default=0)
+    Field('high_score', 'integer', default=0),
     )
 
 

@@ -9,27 +9,72 @@ TODO:
     EXTRA: facebook/twitter sign-in link.
 """
 def index():
-    response.flash = T("YO WHAT UP")
     return dict(message=T('This is the default index page.'))
 
 
 
-
-"""
-This is the users' homepage, displaying:
-
-"""
+@auth.requires_login()
 def home():
-    response.flash = "Home Screen"
+    """
+    return user info so wins/losses/picture can be displayed
+
+    also, if auth user is logged in, retrieve their player info.
+    If there is no player info for this user, redirect to new player screen
+    """
+    logged_in_profile = db(db.user_profile.auth_user_id == auth.user_id).select().first()
+    if logged_in_profile is None:
+        redirect(URL(request.application, request.controller, 'create_new_profile'))
+
     return dict()
 
+
+@auth.requires_login()
+def create_new_profile():
+    """
+    have a form for the user profile to be filled out
+    """
+    current_user_id = auth.user_id
+    form = SQLFORM(db.user_profile,
+                   fields=['username', 'user_image'])
+
+    form.vars.auth_user_id = current_user_id
+
+    if form.process().accepted:
+        session.flash = 'New profile created'
+        redirect(URL('home'))
+    return dict(form=form)
+
+
 def find_new_opponents():
-    response.flash = T("find new opponents screen")
+    """
+    Display list of players (all for now), maybe filter by wins/losses later
+    List with:
+        Username    wins/losses     [start new game]
+
+    [start new game] will redirect you to the game screen
+
+    return: a list of players to face
+    """
+
+    players = db(db.auth_user).select()
+
+    return dict(players=players)
+
+
+def game_screen():
+    """
+    the game screen
+    """
     return dict()
 
 
 def current_games():
-    response.flash = T("current games")
+    """
+    Display 2 sets of games:
+    Games where it is your turn
+    Games where you are waiting to take your turn
+        *have a flag on the right showing if a game is a new game or not
+    """
     return dict()
 
 

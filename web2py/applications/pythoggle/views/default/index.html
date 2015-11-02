@@ -4,6 +4,10 @@
 {{if 'message' in globals():}}
 <h2>{{=message}}</h2>
 
+
+<a class="btn btn-primary"
+   href="{{=URL('home')}}">Home</a>
+
 {{elif 'content' in globals():}}
 {{=content}}
 {{else:}}

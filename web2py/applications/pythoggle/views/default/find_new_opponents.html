@@ -1,0 +1,37 @@
+{{extend 'layout.html'}}
+
+{{if 'message' in globals():}}
+<h2>{{=players}}</h2>
+{{pass}}
+
+
+<div class="container">
+  <h2>Striped Rows</h2>
+  <p>The .table-striped class adds zebra-stripes to a table:</p>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Firstname</th>
+        <th>Lastname</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{ for player in players: }}
+      <tr>
+        <td>{{=player.username}}</td>
+        <td>Doe</td>
+        <td>john@example.com</td>
+      </tr>
+      {{ pass }}
+    </tbody>
+  </table>
+</div>
+
+
+
+{{if 'content' in globals():}}
+{{=content}}
+{{else:}}
+{{=BEAUTIFY(response._vars)}}
+{{pass}}
