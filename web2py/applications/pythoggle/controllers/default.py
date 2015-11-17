@@ -40,6 +40,16 @@ def create_new_profile():
     form.vars.auth_user_id = current_user_id
 
     if form.process().accepted:
+
+
+        if db.user_profile(db.user_profile.auth_user_id==auth.user_id):
+            # then create a new user_profile
+            # TODO: ability to edit username?
+            current_auth_user = db.auth_user(db.auth_user.id == auth.user_id)
+            db.user_profile.insert( {"auth_user_id": current_auth_user.id,
+                                   "username": current_auth_user.email,
+                                   })
+
         session.flash = 'New profile created'
         redirect(URL('home'))
     return dict(form=form)

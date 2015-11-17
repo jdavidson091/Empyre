@@ -95,7 +95,7 @@ db.define_table('user_profile',
     Field('auth_user_id', 'integer', default=0),
     Field('current_matches', 'list:reference pythoggle_match', default=[]),
     Field('old_matches', 'list:reference pythoggle_match', default=[]),
-    Field('user_image', 'upload'),
+    Field('user_image', 'upload', default=None),
     Field('high_score', 'integer', default=0),
     )
 
