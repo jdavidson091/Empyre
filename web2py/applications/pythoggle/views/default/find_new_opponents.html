@@ -14,6 +14,7 @@
         <th>Firstname</th>
         <th>Lastname</th>
         <th>Email</th>
+          <th></th>
       </tr>
     </thead>
     <tbody>
@@ -22,6 +23,9 @@
         <td>{{=player.username}}</td>
         <td>Doe</td>
         <td>john@example.com</td>
+          <td>
+              <a class="btn btn-primary" href="{{=URL('home')}}">start match</a>
+          </td>
       </tr>
       {{ pass }}
     </tbody>

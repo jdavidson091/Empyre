@@ -23,9 +23,10 @@ def home():
     """
     logged_in_profile = db(db.user_profile.auth_user_id == auth.user_id).select().first()
     if logged_in_profile is None:
+        session.flash = 'Since this is your first time, create a new user profile'
         redirect(URL(request.application, request.controller, 'create_new_profile'))
 
-    return dict()
+    return dict(logged_in_profile)
 
 
 @auth.requires_login()
@@ -40,15 +41,6 @@ def create_new_profile():
     form.vars.auth_user_id = current_user_id
 
     if form.process().accepted:
-
-
-        if db.user_profile(db.user_profile.auth_user_id==auth.user_id):
-            # then create a new user_profile
-            # TODO: ability to edit username?
-            current_auth_user = db.auth_user(db.auth_user.id == auth.user_id)
-            db.user_profile.insert( {"auth_user_id": current_auth_user.id,
-                                   "username": current_auth_user.email,
-                                   })
 
         session.flash = 'New profile created'
         redirect(URL('home'))
@@ -66,14 +58,18 @@ def find_new_opponents():
     return: a list of players to face
     """
 
-    players = db(db.auth_user).select()
+    players = db(db.user_profile).select()
+
+    if not players:
+        players = []
 
     return dict(players=players)
 
 
-def game_screen():
+def match():
     """
-    the game screen
+    the screen for an ongoing match
+    :return:
     """
     return dict()
 
