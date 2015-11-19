@@ -81,7 +81,13 @@ def current_games():
     Games where you are waiting to take your turn
         *have a flag on the right showing if a game is a new game or not
     """
-    return dict()
+    matches_your_turn = []
+    matches_their_turn = []
+
+
+    return dict(matches_your_turn=matches_your_turn,
+                matches_their_turn=matches_their_turn,
+                )
 
 
 def past_games():

@@ -120,35 +120,3 @@ db.define_table('pythoggle_match',
     Field('finished', 'boolean', default=False),
     )
 
-
-
-
-# db.define_table('recipe',
-#    Field('name'),
-#    Field('ingredients', 'text'),
-#    Field('instructions', 'text'),
-#    Field('image', 'upload'),
-#    Field('rating','double',writable=False,readable=False),
-#    Field('created_on', 'datetime', default=request.now),
-#    Field('created_by', 'reference auth_user', default=auth.user_id), format = '%(name)s')
-#
-# db.define_table('comment',
-#    Field('recipe_id'),
-#    Field('comment', 'text'),
-#    Field('created_on', 'datetime', default=request.now),
-#    Field('author', 'reference auth_user', default=auth.user_id), format = '%(name)s')
-#
-# db.define_table('vote',
-#     Field('recipe','reference recipe'),
-#     Field('rating','double'))
-#
-# db.recipe.name.requires = IS_NOT_IN_DB(db, db.recipe.name)
-# db.recipe.ingredients.requires = IS_NOT_EMPTY()
-# db.recipe.instructions.requires = IS_NOT_EMPTY()
-#
-# db.comment.recipe_id.requires = IS_IN_DB(db, db.recipe.id, '%(name)s')
-# db.comment.author.requires = IS_IN_DB(db, db.auth_user.id, '%(name)s')
-# db.comment.author.requires = IS_NOT_EMPTY()
-# db.comment.comment.requires = IS_NOT_EMPTY()
-#
-# db.comment.recipe_id.writable = db.comment.recipe_id.readable = False

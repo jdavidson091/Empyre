@@ -5,6 +5,61 @@
 {{pass}}
 
 
+<div class="container">
+  <h2>Your Turn</h2>
+  <p>You can now take your turn on these matches.</p>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Gameinfo column 1</th>
+        <th>Gameinfo column 1</th>
+        <th>Gameinfo column 1</th>
+          <th>Gameinfo column 1</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{ for game_board in matches_your_turn: }}
+      <tr>
+        <td>{{=game_board.user1}}</td>
+        <td>{{=game_board.user1}}</td>
+        <td>col 3</td>
+          <td>
+              <a class="btn btn-primary" href="{{=URL('home')}}">play turn</a>
+          </td>
+      </tr>
+      {{ pass }}
+    </tbody>
+  </table>
+</div>
+
+<div class="container">
+  <h2>Their turn</h2>
+  <p>Wait for your opponent to take their turn.</p>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Gameinfo column 1</th>
+        <th>Gameinfo column 1</th>
+        <th>Gameinfo column 1</th>
+          <th>Gameinfo column 1</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{ for game_board in matches_their_turn: }}
+      <tr>
+        <td>{{=game_board.user1}}</td>
+        <td>{{=game_board.user1}}</td>
+        <td>col 3</td>
+          <td>
+              not your turn
+          </td>
+      </tr>
+      {{ pass }}
+    </tbody>
+  </table>
+</div>
+
+
 
 {{if 'content' in globals():}}
 {{=content}}
