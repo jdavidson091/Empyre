@@ -1,0 +1,39 @@
+
+.nodec {
+    text-decoration: none;
+    color: black;
+}
+
+table#gametable {
+    border-collapse: collapse;
+    /*background-color: #58d7c2;*/
+}
+
+table#gametable td {
+    font-family: verdana;
+    text-align: center;
+    font-size: 24pt;
+    vertical-align: middle;
+    border: 3px solid black;
+    border-collapse: collapse;
+    height: 60px;
+    width: 60px;
+    padding: 10px;
+}
+
+table#timetable {
+    border: 3px solid black;
+    border-top: 0px solid black;
+}
+
+div#timeremaining {
+    font-size: 24pt;
+}
+
+td#bar_remaining {
+    background-color: #006ef0;
+}
+
+td#bar_elapsed {
+    background-color: rgba(255, 6, 31, 0.98);
+}

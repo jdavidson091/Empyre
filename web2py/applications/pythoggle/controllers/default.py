@@ -71,6 +71,13 @@ def match():
     the screen for an ongoing match
     :return:
     """
+    # retrieve the current match info from passed id (add authentication checking later)
+    game_board_id = request.args(0)
+    current_game_board = db.game_board(game_board_id)
+
+    #display the current game board...
+    
+
     return dict()
 
 
