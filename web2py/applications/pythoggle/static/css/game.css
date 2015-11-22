@@ -12,7 +12,8 @@ table#gametable {
 table#gametable td {
     font-family: verdana;
     text-align: center;
-    background: #76D5F5;
+    background: #b8aeba;
+    /*background: #FC6868;*/
     font-size: 24pt;
     vertical-align: middle;
     border: 3px solid black;

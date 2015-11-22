@@ -7,9 +7,6 @@
 {{pass}}
 
 
-
-
-
 <label class="switch switch-yes-no">
     <input class="switch-input" type="checkbox"/>
     <span class="switch-label" data-on="Yes" data-off="No"></span>
@@ -24,102 +21,19 @@
     <script type="text/javascript" src='words.js'></script>
     <script type="text/javascript">
 
-        function theFunction(event) {
-            var currentTarget = event.currentTarget;
-            var cell = event.currentTarget.offsetParent.id;
-            var letter = event.currentTarget.textContent;
-
-//            alert(p);
-        }
-
-        function make_table(first_time) {
-            var table_string = '<table id="gametable" width="100%">';
-            var x, y;
-            for (x = 0; x < dimension; x++)
-            {
-                table_string = table_string + '<tr>';
-                for (y = 0; y < dimension; y++) {
-                    table_string = table_string + '<td id="' + x + '_' + y + '" width="' + 250 / dimension + 'px"> </td>';
-                }
-                table_string = table_string + '</tr>';
-            }
-            table_string = table_string + '</table>';
-            if (first_time) {
-                document.writeln(table_string);
-            } else {
-                document.getElementById('board_div').innerHTML = table_string;
-            }
-        }
-
-        function update_table() {
-            var x, y;
-            for (x = 0; x < dimension; x++)  // here? 2
-            {
-                for (y = 0; y < dimension; y++) {
-                    var character = board[x + y * dimension].toUpperCase();
-                    if (character == 'Q') character = 'Qu';
-                    var location = x + '_' + y
-                    document.getElementById(location).innerHTML = "<a onclick=\"theFunction(event)\">" + character + "</b>";
-                }
-            }
-        }
-
-        function rolldice() {
-            var i, j;
-            for (i = 0; i < dimension * dimension; i++) {
-                j = Math.floor(Math.random() * dice.length);
-                var die = dice[j];
-                j = Math.floor(Math.random() * 6);
-                board[i] = die.charAt(j);
-            }
-        }
-
-        function new_game() {
-            rolldice();
-            make_table(false);
-            update_table();
-            var tt = document.getElementById('totaltime');
-            if (tt) {
-                totaltime = parseInt(tt.value) * 1000;
-            }
-            var sol = document.getElementById('solution');
-            if (sol) sol.innerHTML = '';
-            if (timeremaining > 0)
-                clearTimeout(timervar);
-            timeremaining = totaltime;
-            timervar = setTimeout("tick()", updatefrequency);
-            //set background color of gametable to light blue
-            document.getElementById('gametable').style.backgroundColor = "#76D5F5";
-        }
-
-        function tick() {
-            timeremaining = timeremaining - updatefrequency;
-            if (timeremaining <= 0) {
-                timeremaining = 0;
-                document.getElementById('gametable').style.backgroundColor = "#FFAA00";
-            } else {
-                timervar = setTimeout('tick()', updatefrequency);
-            }
-            var t = Math.ceil(timeremaining / 1000);
-            document.getElementById('timeremaining').innerHTML = "Remaining time: " + t;
-            var w = Math.floor(bar_width * timeremaining / totaltime);
-            document.getElementById('bar_remaining').width = w;
-            document.getElementById('bar_elapsed').width = bar_width - w;
-        }
-
-        function transform_word(word) {
-            var w = word.toUpperCase();
-            return w.replace(/Q/g, 'Qu');
-        }
-
-        dimension = 4;
+        current_word = [];
+        list_of_words = [];
+        color_light_yellow = "#f9ff60";
+        color_light_grey = "#b8aeba";
+        game_in_progress = false;
+                dimension = 4;
         bar_width = 368;
 
         //2 minutes = 120 * 1000 millis
         totaltime = 120 * 1000;
-        timeremaining = 0;
+        time_remaining = 0;
         updatefrequency = 50;
-        timervar = null;
+        timer_var = null;
         numsolutioncols = 4;
 
         dice =
@@ -151,6 +65,157 @@
 
         board = [];
         board.length = dimension * dimension;
+
+        function get_current_word_string() {
+            var word = '';
+            for (var i = 0; i < current_word.length; ++i) {
+                word = word + current_word[i];
+            }
+            return word;
+        }
+
+        function color_cell(cell) {
+             document.getElementById(cell).style.backgroundColor = "#f9ff60";
+        }
+
+        /**
+         * TODO: finish writing this method
+         */
+        function can_be_pressed_down(cell) {
+            if (current_word.length = 0) {
+                return true;
+            }
+
+            //else, check to make sure the location of this cell is adjacent to the current cell
+
+
+            //TODO: temp, remove this
+            return true
+        }
+
+        function clear_word_and_board() {
+            current_word = [];
+
+            //for every square in the board, clear the color
+        }
+
+        function end_game() {
+            time_remaining = 0;
+            document.getElementById('game_table').style.backgroundColor = "#FFAA00";
+            game_in_progress = false;
+
+            //TODO::::: submit the words to the web2py code that these words are what this player submitted
+        }
+
+
+        /**
+         * TODO: finish writing this method
+         * TODO: call this function when the "submit word" button is pressed
+         * TODO: also have "clear" button if you want to clear the current word
+         * TODO: have score calculated, submitted when time runs out, no longer able to submit words
+         */
+        function submit_current_word() {
+            var word_string = get_current_word_string();
+            //check to see if the current word is in the english dictionary
+            if (words.indexOf(word_string) > -1) {
+                list_of_words.append(word_string);
+                clear_word_and_board();
+                return true;
+            }
+            return false;
+        }
+
+        function letter_selected(event) {
+            var cell = event.currentTarget.offsetParent.id;
+            var letter = event.currentTarget.textContent;
+            if (can_be_pressed_down(cell)) {
+                document.getElementById(cell).style.backgroundColor = color_light_yellow;
+                color_cell(cell);
+                current_word.push(letter);
+            }
+        }
+
+        function make_table(first_time) {
+            var table_string = '<table id="game_table" width="100%">';
+            var x, y;
+            for (x = 0; x < dimension; x++)
+            {
+                table_string = table_string + '<tr>';
+                for (y = 0; y < dimension; y++) {
+                    table_string = table_string + '<td id="' + x + '_' + y + '" width="' + 250 / dimension + 'px"> </td>';
+                }
+                table_string = table_string + '</tr>';
+            }
+            table_string = table_string + '</table>';
+            if (first_time) {
+                document.writeln(table_string);
+            } else {
+                document.getElementById('board_div').innerHTML = table_string;
+            }
+        }
+
+        function update_table() {
+            var x, y;
+            for (x = 0; x < dimension; x++)  // here? 2
+            {
+                for (y = 0; y < dimension; y++) {
+                    var character = board[x + y * dimension].toUpperCase();
+                    if (character == 'Q') character = 'Qu';
+                    var cell_id = x + '_' + y;
+                    document.getElementById(cell_id).innerHTML = "<a onclick=\"letter_selected(event)\">" + character + "</b>";
+                }
+            }
+        }
+
+        function roll_dice() {
+            var i, j;
+            for (i = 0; i < dimension * dimension; i++) {
+                j = Math.floor(Math.random() * dice.length);
+                var die = dice[j];
+                j = Math.floor(Math.random() * 6);
+                board[i] = die.charAt(j);
+            }
+        }
+
+        function new_game() {
+            game_in_progress = true;
+            roll_dice();
+            make_table(false);
+            update_table();
+            var tt = document.getElementById('totaltime');
+            if (tt) {
+                totaltime = parseInt(tt.value) * 1000;
+            }
+            var sol = document.getElementById('solution');
+            if (sol) sol.innerHTML = '';
+            if (time_remaining > 0)
+                clearTimeout(timer_var);
+            time_remaining = totaltime;
+            timer_var = setTimeout("tick()", updatefrequency);
+            //set background color of game_table to light blue
+            document.getElementById('game_table').style.backgroundColor = color_light_grey;
+        }
+
+        function tick() {
+            time_remaining = time_remaining - updatefrequency;
+            if (time_remaining <= 0) {
+                //timer has ended, initiate end game logic
+                end_game()
+            } else {
+                timer_var = setTimeout('tick()', updatefrequency);
+            }
+            var t = Math.ceil(time_remaining / 1000);
+            document.getElementById('time_remaining').innerHTML = "Remaining time: " + t;
+            var w = Math.floor(bar_width * time_remaining / totaltime);
+            document.getElementById('bar_remaining').width = w;
+            document.getElementById('bar_elapsed').width = bar_width - w;
+        }
+
+        function transform_word(word) {
+            var w = word.toUpperCase();
+            return w.replace(/Q/g, 'Qu');
+        }
+
     </script>
 </head>
 <body>
@@ -167,7 +232,7 @@
                     <td id='bar_remaining' width=218 height=25></td>
                     <td id='bar_elapsed' width=150 height=25></td>
             </table>
-            <div id="timeremaining" style="margin-bottom:10px; margin-top: 10px;">
+            <div id="time_remaining" style="margin-bottom:10px; margin-top: 10px;">
                 Time remaining: ...
             </div>
             <form>
