@@ -25,6 +25,7 @@
         list_of_words = [];
         color_light_yellow = "#f9ff60";
         color_light_grey = "#b8aeba";
+        color_orange = "#ffaa00";
         game_in_progress = false;
                 dimension = 4;
         bar_width = 368;
@@ -86,7 +87,7 @@
         }
 
         function color_cell(cell) {
-             document.getElementById(cell).style.backgroundColor = "#f9ff60";
+             document.getElementById(cell).style.backgroundColor = color_light_yellow;
         }
 
         /**
@@ -108,11 +109,17 @@
             current_word = [];
 
             //for every square in the board, clear the color
+            for (x = 0; x < dimension; x++){
+                for (y = 0; y < dimension; y++) {
+                    var cell = x + "_" + y;
+                    document.getElementById(cell).style.backgroundColor = color_light_grey;
+                }
+            }
         }
 
         function end_game() {
             time_remaining = 0;
-            document.getElementById('game_table').style.backgroundColor = "#FFAA00";
+            document.getElementById('game_table').style.backgroundColor = color_orange;
             game_in_progress = false;
 
             //TODO: submit the words to the web2py code that these words are what this player submitted.
@@ -122,7 +129,8 @@
 
         function submit_current_word() {
             var word_string = get_current_word_string();
-            //check to see if the current word is in the english dictionary
+            //check to see if the current word is in the english dictionary.
+            //if so, clear the board and current word, add to submitted words list, and return true
             if (words.indexOf(word_string) > -1) {
                 list_of_words.append(word_string);
                 clear_word_and_board();
@@ -144,8 +152,7 @@
         function make_table(first_time) {
             var table_string = '<table id="game_table" width="100%">';
             var x, y;
-            for (x = 0; x < dimension; x++)
-            {
+            for (x = 0; x < dimension; x++){
                 table_string = table_string + '<tr>';
                 for (y = 0; y < dimension; y++) {
                     table_string = table_string + '<td id="' + x + '_' + y + '" width="' + 250 / dimension + 'px"> </td>';
