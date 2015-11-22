@@ -66,6 +66,17 @@
         board = [];
         board.length = dimension * dimension;
 
+
+
+
+        /**
+         * TODO: create submit word button
+         * TODO: call submit_current_word() when the "submit word" button is pressed
+         * TODO: also have "clear" button if you want to clear the current word
+         */
+
+
+
         function get_current_word_string() {
             var word = '';
             for (var i = 0; i < current_word.length; ++i) {
@@ -104,16 +115,11 @@
             document.getElementById('game_table').style.backgroundColor = "#FFAA00";
             game_in_progress = false;
 
-            //TODO::::: submit the words to the web2py code that these words are what this player submitted
+            //TODO: submit the words to the web2py code that these words are what this player submitted.
+            //TODO: also calculate score here? maybe just in python code
         }
 
 
-        /**
-         * TODO: finish writing this method
-         * TODO: call this function when the "submit word" button is pressed
-         * TODO: also have "clear" button if you want to clear the current word
-         * TODO: have score calculated, submitted when time runs out, no longer able to submit words
-         */
         function submit_current_word() {
             var word_string = get_current_word_string();
             //check to see if the current word is in the english dictionary
@@ -177,6 +183,9 @@
             }
         }
 
+
+
+        //TODO: clean up, refactor these methods more.
         function new_game() {
             game_in_progress = true;
             roll_dice();
