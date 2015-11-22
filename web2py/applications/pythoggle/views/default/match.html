@@ -1,7 +1,7 @@
 {{extend 'layout.html'}}
-<link href="{{=URL('static', 'css/switch.css')}}" rel="stylesheet" type="text/css"/>
-<link href="{{=URL('static', 'css/game.css')}}" rel="stylesheet" type="text/css"/>
 
+<link href="{{=URL('static', 'css/game.css')}}" rel="stylesheet" type="text/css"/>
+<link href="{{=URL('static', 'css/switch.css')}}" rel="stylesheet" type="text/css"/>
 {{if 'message' in globals():}}
 <h2>{{=message}}</h2>
 {{pass}}
@@ -18,112 +18,66 @@
 
 
 <head>
-    <title>Boggle!</title>
+    <title>Pythoggle</title>
     <link rel="stylesheet" href="../../static/css/game.css">
     <script type="text/javascript" src='seedrandom.js'></script>
     <script type="text/javascript" src='words.js'></script>
     <script type="text/javascript">
 
-        function set_board_size() {
-            var bs = document.getElementById('boardsize');
-            if (bs) {
-                dimension = parseInt(bs.value);
-                board = new Array();
-                board.length = dimension * dimension;
-            }
+        function theFunction(event) {
+            var currentTarget = event.currentTarget;
+            var cell = event.currentTarget.offsetParent.id;
+            var letter = event.currentTarget.textContent;
+
+//            alert(p);
         }
 
-        function open_new_window(URL) {
-            NewWindow = window.open(URL, "_blank", "toolbar=no,menubar=0,status=0,copyhistory=0,scrollbars=yes,resizable=1,location=0,Width=800,Height=600");
-            NewWindow.location = URL;
-        }
-
-        function maketable(firsttime) {
-            var s = '<table id="gametable" width="100%">';
-            var i, j;
-            for (i = 0; i < dimension; i++) // here? 1
+        function make_table(first_time) {
+            var table_string = '<table id="gametable" width="100%">';
+            var x, y;
+            for (x = 0; x < dimension; x++)
             {
-                s = s + '<tr>';
-                for (j = 0; j < dimension; j++) {
-                    s = s + '<td id="' + i + '_' + j + '" width="' + 250 / dimension + 'px">*</td>';
+                table_string = table_string + '<tr>';
+                for (y = 0; y < dimension; y++) {
+                    table_string = table_string + '<td id="' + x + '_' + y + '" width="' + 250 / dimension + 'px"> </td>';
                 }
-                s = s + '</tr>';
+                table_string = table_string + '</tr>';
             }
-            s = s + '</table>';
-            if (firsttime) {
-                document.writeln(s);
+            table_string = table_string + '</table>';
+            if (first_time) {
+                document.writeln(table_string);
             } else {
-                document.getElementById('board_div').innerHTML = s;
+                document.getElementById('board_div').innerHTML = table_string;
             }
         }
 
-        function updatetable() {
-            var i, j;
-            for (i = 0; i < dimension; i++)  // here? 2
+        function update_table() {
+            var x, y;
+            for (x = 0; x < dimension; x++)  // here? 2
             {
-                for (j = 0; j < dimension; j++) {
-                    var c = board[i + j * dimension].toUpperCase();
-                    if (c == 'Q') c = 'Qu';
-                    document.getElementById(i + '_' + j).innerHTML = c;
+                for (y = 0; y < dimension; y++) {
+                    var character = board[x + y * dimension].toUpperCase();
+                    if (character == 'Q') character = 'Qu';
+                    var location = x + '_' + y
+                    document.getElementById(location).innerHTML = "<a onclick=\"theFunction(event)\">" + character + "</b>";
                 }
             }
         }
 
         function rolldice() {
-            var i, j, k;
-            if (dimension == 5) {
-                rolldice5();
-                return;
-            }
-            var remaining = new Array();
+            var i, j;
             for (i = 0; i < dimension * dimension; i++) {
                 j = Math.floor(Math.random() * dice.length);
                 var die = dice[j];
                 j = Math.floor(Math.random() * 6);
-                var c = die.charAt(j);
-                board[i] = c;
+                board[i] = die.charAt(j);
             }
         }
 
-        function rolldice5() {
-            var i, j, k;
-            var remaining = new Array();
-            for (i = 0; i < 25; i++)
-                remaining.push(i);
-            var order = new Array();
-            for (i = 0; i < 25; i++) {
-                j = Math.floor(Math.random() * remaining.length);
-                k = remaining.splice(j, 1);
-                var die = dice[k];
-                j = Math.floor(Math.random() * 6);
-                var c = die.charAt(j);
-                board[i] = c;
-            }
-        }
-
-        function defineboard() {
-            var b = document.getElementById('boarddef').value.toLowerCase();
-            if (b.length == dimension * dimension) {
-                var i, j, k = 0;
-                for (i = 0; i < dimension; i++) {
-                    for (j = 0; j < dimension; j++) {
-                        board[i + j * 5] = b.charAt(k);
-                        k += 1;
-                    }
-                }
-                updatetable();
-                if (timeremaining > 0)
-                    clearTimeout(timervar);
-                timeremaining = 0;
-                document.getElementById('gametable').style.backgroundColor = "#00FF00";
-                showsolution();
-            }
-        }
-
-        function newgame() {
+        function new_game() {
             rolldice();
-            maketable(false);
-            updatetable();
+            make_table(false);
+            update_table();
             var tt = document.getElementById('totaltime');
             if (tt) {
                 totaltime = parseInt(tt.value) * 1000;
@@ -134,13 +88,8 @@
                 clearTimeout(timervar);
             timeremaining = totaltime;
             timervar = setTimeout("tick()", updatefrequency);
-            document.getElementById('gametable').style.backgroundColor = "#FFFF00";
-        }
-
-        function newseededgame() {
-            seedstr = document.getElementById('seeddef').value;
-            Math.seedrandom(seedstr);
-            newgame();
+            //set background color of gametable to light blue
+            document.getElementById('gametable').style.backgroundColor = "#76D5F5";
         }
 
         function tick() {
@@ -163,112 +112,29 @@
             return w.replace(/Q/g, 'Qu');
         }
 
-        function showsolution() {
-            solve();
-            var s = '<table width="100%">'
-            var col = 0;
-            var bgcolor = 0;
-            var bgcolstr = "$aaaaff";
-            for (var wl = 25; wl >= 3; wl--) {
-                var numsolsatthiswl = 0;
-                for (var i = 0; i < solutions.length; i++) {
-                    if (solutions[i].length == wl) {
-                        var w = transform_word(solutions[i]);
-                        if (col == 0)
-                            s += '<tr>'
-                        col = (col + 1) % numsolutioncols;
-                        s += '<td style="background-color:' + bgcolstr + ';">';
-                        //s += '<a class="nodec" href="http://www.lexic.us/definition-of/'+w+'" target="_blank">';
-                        s += '<a class="nodec" href="#" onClick="open_new_window('
-                        s += "'http://www.lexic.us/definition-of/" + w + "');" + '">';
-                        s += w;
-                        s += '</a></td>';
-                        if (col == 0)
-                            s += '</tr>\n';
-                        numsolsatthiswl += 1;
-                    }
-                }
-                if (numsolsatthiswl > 0) {
-                    bgcolor = (bgcolor + 1) % 2;
-                    if (bgcolor == 0) bgcolstr = "#aaaaff";
-                    else           bgcolstr = "#8888cc";
-                }
-            }
-            if (col > 0)
-                s += '</tr>';
-            s += '</table>';
-            document.getElementById('solution').innerHTML = s;
-        }
-
-        function solve() {
-            var minlength = parseInt(document.getElementById('minlength').value);
-            solutions = new Array();
-            for (var i = 0; i < words.length; i++) {
-                if (words[i].length >= minlength) {
-                    if (findword(words[i])) {
-                        solutions.push(words[i]);
-                    }
-                }
-            }
-            updatetable();
-        }
-
-        function findword(word) {
-            if (word.length == 0) return 0;
-            var i, j;
-            for (i = 0; i < dimension; i++) {
-                for (j = 0; j < dimension; j++) {
-                    if (board[i + j * dimension] == word.charAt(0)) {
-                        if (findsequence(word, i, j)) return 1;
-                    }
-                }
-            }
-            return 0;
-        }
-
-        function safeboard(i, j) {
-            if ((i < 0) || (j < 0) || (i >= dimension) || (j >= dimension)) return '*';
-            return board[i + j * dimension];
-        }
-
-        function findsequence(seq, i, j) {
-            if (seq.length <= 1) return 1;
-            var s;
-            s = board[i + j * dimension];
-            board[i + j * dimension] = ' ';
-            for (var u = -1; u <= 1; u = u + 1) {
-                for (var v = -1; v <= 1; v = v + 1) {
-                    if (safeboard(i + u, j + v) == seq.charAt(1)) {
-                        if (findsequence(seq.substr(1), i + u, j + v)) {
-                            board[i + j * dimension] = s;
-                            return 1;
-                        }
-                    }
-                }
-            }
-            board[i + j * dimension] = s;
-            return 0;
-        }
-
-        dimension = 5;
+        dimension = 4;
         bar_width = 368;
-        totaltime = 10 * 1000;
+
+        //2 minutes = 120 * 1000 millis
+        totaltime = 120 * 1000;
         timeremaining = 0;
         updatefrequency = 50;
         timervar = null;
         numsolutioncols = 4;
 
-        dice = new Array(
-                "yqyswf",
-                "sztllp",
+        dice =
+                ["yqyswf",
                 "xolrql",
-                "hcthjt",
                 "jkhhwf",
                 "ioeoau",
                 "qbrlpr",
+                "oaaeeu",
                 "ggnetn",
-                "aaeouo",
                 "eiaeao",
+                "uieeoo",
+                "hcthjt",
+                "sztllp",
+                "aaeouo",
                 "scywsj",
                 "ioeuee",
                 "aioeea",
@@ -277,15 +143,13 @@
                 "ouoaei",
                 "sysyfd",
                 "mlgmcp",
-                "uieeoo",
                 "dbxvdy",
                 "fnrddw",
-                "oaaeeu",
                 "vmrgzr",
                 "dkxmpk",
-                "bvtnts");
+                "bvtnts"];
 
-        board = new Array();
+        board = [];
         board.length = dimension * dimension;
     </script>
 </head>
@@ -295,7 +159,7 @@
         <td valign="top">
             <div id="board_div">
                 <script language='javascript'>
-                    maketable(true);
+                    make_table(true);
                 </script>
             </div>
             <table width=368 cellpadding=0 cellspacing=0 id="timetable">
@@ -308,48 +172,8 @@
             </div>
             <form>
                 <div style="margin-bottom: 10px;">
-                    <input type="button" value="New game" onclick='newgame()'>
+                    <input type="button" value="New game" onclick='new_game()'>
                     Timer:
-                    <select name="totaltimesel" id="totaltime">
-                        <option value="30">30 seconds</option>
-                        <option value="60">60 seconds</option>
-                        <option value="90">90 seconds</option>
-                        <option value="120">Two minutes</option>
-                        <option value="180" selected="selected">Three minutes</option>
-                        <option value="240">Four minutes</option>
-                        <option value="300">Five minutes</option>
-                    </select>
-                    Size:
-                    <select name="boardsizesel" id="boardsize" onclick='set_board_size()'>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5" selected="selected">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                    </select>
-                </div>
-                <div style="margin-bottom: 20px;">
-                    <input type="button" value="Show solution" onclick='showsolution()'>
-                    Minimum length:
-                    <select name="minlengthsel" id="minlength">
-                        <option value="3">3</option>
-                        <option value="4" selected="selected">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                    </select>
-                </div>
-                <div style="margin-bottom: 10px;">
-                    <input type="button" value="Solve:" onclick='defineboard()'>
-                    <input type="text" id="boarddef" size=43>
-                    <br/>
-                    Enter characters row by row, putting just a Q for a Qu
-                </div>
-                <div style="margin-bottom: 10px;">
-                    <input type="button" value="Seeded" onclick='newseededgame()'>
-                    <input type="text" maxlength=25 id="seeddef" size=30>
                 </div>
             </form>
         </td>
