@@ -27,16 +27,17 @@
         color_light_grey = "#b8aeba";
         color_orange = "#ffaa00";
         game_in_progress = false;
-                dimension = 4;
+        dimension = 4;
         bar_width = 368;
+        last_pressed_down = "";
 
-        //2 minutes = 120 * 1000 millis
-        totaltime = 120 * 1000;
+        //2 minutes in millis
+        total_time = 120 * 1000;
         time_remaining = 0;
-        updatefrequency = 50;
+        update_frequency = 50;
         timer_var = null;
-        numsolutioncols = 4;
-
+        board = [];
+        board.length = dimension * dimension;
         dice =
                 ["yqyswf",
                 "xolrql",
@@ -64,8 +65,6 @@
                 "dkxmpk",
                 "bvtnts"];
 
-        board = [];
-        board.length = dimension * dimension;
 
 
 
@@ -74,6 +73,8 @@
          * TODO: create submit word button
          * TODO: call submit_current_word() when the "submit word" button is pressed
          * TODO: also have "clear" button if you want to clear the current word
+         *
+         * TODO: display all submitted words on the side somewhere
          */
 
 
@@ -88,21 +89,38 @@
 
         function color_cell(cell) {
              document.getElementById(cell).style.backgroundColor = color_light_yellow;
+             last_pressed_down = cell;
         }
 
-        /**
-         * TODO: finish writing this method
-         */
+
         function can_be_pressed_down(cell) {
             if (current_word.length = 0) {
                 return true;
             }
 
-            //else, check to make sure the location of this cell is adjacent to the current cell
+            var cell_dimensions = last_pressed_down.split("_");
+            var cell_x = parseInt(cell_dimensions[0]);
+            var cell_y = parseInt(cell_dimensions[1]);
 
+            possible_cells = [];
 
-            //TODO: temp, remove this
-            return true
+            //check each viable position combination
+            for (x = 0; x < dimension; x++){
+                for (y = 0; y < dimension; y++) {
+                    if (x <= cell_x + 1 || x >= cell_x - 1) {
+                        if (y <= cell_y + 1 || y >= cell_y - 1) {
+                            possible_cells.append(x + "_" + y);
+                        }
+                    }
+                }
+            }
+
+            //now, check if our passed cell exists in possible_cells
+            if (possible_cells.indexOf(cell) > -1) {
+                return true
+            }
+
+            return false;
         }
 
         function clear_word_and_board() {
@@ -129,6 +147,7 @@
 
         function submit_current_word() {
             var word_string = get_current_word_string();
+
             //check to see if the current word is in the english dictionary.
             //if so, clear the board and current word, add to submitted words list, and return true
             if (words.indexOf(word_string) > -1) {
@@ -198,31 +217,31 @@
             roll_dice();
             make_table(false);
             update_table();
-            var tt = document.getElementById('totaltime');
+            var tt = document.getElementById('total_time');
             if (tt) {
-                totaltime = parseInt(tt.value) * 1000;
+                total_time = parseInt(tt.value) * 1000;
             }
             var sol = document.getElementById('solution');
             if (sol) sol.innerHTML = '';
             if (time_remaining > 0)
                 clearTimeout(timer_var);
-            time_remaining = totaltime;
-            timer_var = setTimeout("tick()", updatefrequency);
+            time_remaining = total_time;
+            timer_var = setTimeout("tick()", update_frequency);
             //set background color of game_table to light blue
             document.getElementById('game_table').style.backgroundColor = color_light_grey;
         }
 
         function tick() {
-            time_remaining = time_remaining - updatefrequency;
+            time_remaining = time_remaining - update_frequency;
             if (time_remaining <= 0) {
                 //timer has ended, initiate end game logic
                 end_game()
             } else {
-                timer_var = setTimeout('tick()', updatefrequency);
+                timer_var = setTimeout('tick()', update_frequency);
             }
             var t = Math.ceil(time_remaining / 1000);
             document.getElementById('time_remaining').innerHTML = "Remaining time: " + t;
-            var w = Math.floor(bar_width * time_remaining / totaltime);
+            var w = Math.floor(bar_width * time_remaining / total_time);
             document.getElementById('bar_remaining').width = w;
             document.getElementById('bar_elapsed').width = bar_width - w;
         }
