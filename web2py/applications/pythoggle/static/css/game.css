@@ -4,12 +4,12 @@
     color: black;
 }
 
-table#gametable {
+table#game_table {
     border-collapse: collapse;
     /*background-color: #58d7c2;*/
 }
 
-table#gametable td {
+table#game_table td {
     font-family: verdana;
     text-align: center;
     background: #b8aeba;
@@ -23,12 +23,12 @@ table#gametable td {
     padding: 10px;
 }
 
-table#timetable {
+table#time_table {
     border: 3px solid black;
     border-top: 0px solid black;
 }
 
-div#timeremaining {
+div#time_remaining {
     font-size: 24pt;
 }
 
