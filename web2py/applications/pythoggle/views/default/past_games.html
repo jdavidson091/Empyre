@@ -4,7 +4,53 @@
 <h2>{{=message}}</h2>
 {{pass}}
 
+<div class="container">
+  <h2>Past games as First player</h2>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Player 1 id</th>
+        <th>Player 1 Score</th>
+        <th>Player 2 id</th>
+          <th>Player 2 Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{ for game in p1_past_games: }}
+      <tr>
+        <td>{{=game.user1_id}}</td>
+        <td>{{=game.user1_score}}</td>
+        <td>{{=game.user2_id}}</td>
+        <td>{{=game.user2_score}}</td>
+      </tr>
+      {{ pass }}
+    </tbody>
+  </table>
+</div>
 
+<div class="container">
+  <h2>Past games as Second player</h2>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Player 1 id</th>
+        <th>Player 1 Score</th>
+        <th>Player 2 id</th>
+          <th>Player 2 Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{ for game in p2_past_games: }}
+      <tr>
+        <td>{{=game.user1_id}}</td>
+        <td>{{=game.user1_score}}</td>
+        <td>{{=game.user2_id}}</td>
+        <td>{{=game.user2_score}}</td>
+      </tr>
+      {{ pass }}
+    </tbody>
+  </table>
+</div>
 
 {{if 'content' in globals():}}
 {{=content}}

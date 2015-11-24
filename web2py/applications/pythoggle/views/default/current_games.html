@@ -20,8 +20,8 @@
     <tbody>
       {{ for game_board in matches_your_turn: }}
       <tr>
-        <td>{{=game_board.user1}}</td>
-        <td>{{=game_board.user1}}</td>
+        <td>{{=game_board.user1_id}}</td>
+        <td>{{=game_board.user1_id}}</td>
         <td>col 3</td>
           <td>
               <a class="btn btn-primary" href="{{=URL('home')}}">play turn</a>
@@ -47,8 +47,8 @@
     <tbody>
       {{ for game_board in matches_their_turn: }}
       <tr>
-        <td>{{=game_board.user1}}</td>
-        <td>{{=game_board.user1}}</td>
+        <td>{{=game_board.user1_id}}</td>
+        <td>{{=game_board.user1_id}}</td>
         <td>col 3</td>
           <td>
               not your turn

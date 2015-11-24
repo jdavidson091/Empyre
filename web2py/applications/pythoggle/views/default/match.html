@@ -121,7 +121,7 @@
             time_remaining = 0;
             document.getElementById('game_table').style.backgroundColor = color_orange;
             game_in_progress = false;
-            var string_to_pass = '/pythoggle/default/post_game?id='+ game_id + '&value=' + total_player_score;
+            var string_to_pass = '/pythoggle/default/post_game?game_id='+ game_id + '&value=' + total_player_score;
             var l = location.origin;
 
             window.location.href = location.origin + string_to_pass;

@@ -66,17 +66,24 @@ def find_new_opponents():
     return dict(players=players)
 
 
+def setup_match():
+    """
+    called by find_new_opponents, creates a new match and redirects to the match view
+    takes the contested player's id as an arg
+    :return:
+    """
+    new_player_id = request.args(0)
+    game_board_id = db.game_board.insert(user1_id=auth.user_id, user2_id=new_player_id)
+
+    redirect(URL('match', args=game_board_id))
+
+
 def match():
     """
     the screen for an ongoing match
     :return:
     """
-    # retrieve the current match info from passed id (add authentication checking later)
     game_board_id = request.args(0)
-
-    #display the current game board...
-    
-    player_score = 0
     return dict(game_board_id=game_board_id)
 
 
@@ -98,13 +105,17 @@ def current_games():
 
 def post_game():
     """
-    postgame, show current game and
-    have a list of past games that you are involved in
+    postgame, apply the user's score to the current game
+    then redirect to past game
     :return:
     """
-    value = request.vars
-    # current_game_board = db.game_board(game_board_id)
-    #<Storage {'id': '1', 'value': '7'}>
+    game_id = request.vars.game_id
+    game_to_save = db(db.game_board.id == game_id).select().first()
+    logged_in_profile = db(db.user_profile.auth_user_id == auth.user_id).select().first()
+    if logged_in_profile.id == game_to_save.user1_id:
+        game_to_save.update_record(user1_score=request.vars.value)
+    elif logged_in_profile.id == game_to_save.user2_id:
+        game_to_save.update_record(user2_score=request.vars.value)
 
     redirect('past_games')
 
@@ -115,13 +126,12 @@ def past_games():
     have a list of past games that you are involved in
     :return:
     """
+    logged_in_profile = db(db.user_profile.auth_user_id == auth.user_id).select().first()
+    games_p1 = db(db.game_board.user1_id == logged_in_profile.id).select()
+    games_p2 = db(db.game_board.user2_id == logged_in_profile.id).select()
 
+    return dict(p1_past_games=games_p1, p2_past_games=games_p2)
 
-
-    return dict()
-
-
-# TODO: have 'game' screen be in a different controller/view?
 
 def high_scores():
     response.flash = "high score screen"

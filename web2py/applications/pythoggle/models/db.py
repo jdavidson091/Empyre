@@ -101,14 +101,10 @@ db.define_table('user_profile',
 
 
 db.define_table('game_board',
-    Field('board_values', 'string'),
-    Field('user1', 'reference user_profile'),
-    Field('user2', 'reference user_profile'),
-    Field('user1_words', 'list:string'),
-    Field('user2_words', 'list:string'),
-    Field('user1_score', 'integer'),
-    Field('user2_score', 'integer'),
-
+    Field('user1_id', 'integer'),
+    Field('user2_id', 'integer'),
+    Field('user1_score', 'integer', default=0),
+    Field('user2_score', 'integer', default=0),
     )
 
 #don't implement time left to play initially
