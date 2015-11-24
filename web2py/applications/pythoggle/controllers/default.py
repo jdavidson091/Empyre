@@ -77,8 +77,8 @@ def match():
 
     #display the current game board...
     
-
-    return dict()
+    player_score = 0
+    return dict(player_score=player_score)
 
 
 def current_games():
@@ -98,8 +98,20 @@ def current_games():
 
 
 def past_games():
-    response.flash = T("past games")
-    return dict()
+    """
+    have a list of past games that you are involved in
+    :return:
+    """
+    r = request
+    v = request.get_vars
+    value = request.vars
+    # print(value)
+    # handle the variable
+    # redirect(URL('index'), client_side=True)
+
+    print (r)
+    print (v)
+    return dict(value=value)
 
 
 # TODO: have 'game' screen be in a different controller/view?
