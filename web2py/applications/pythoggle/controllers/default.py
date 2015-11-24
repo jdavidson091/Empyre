@@ -73,12 +73,11 @@ def match():
     """
     # retrieve the current match info from passed id (add authentication checking later)
     game_board_id = request.args(0)
-    current_game_board = db.game_board(game_board_id)
 
     #display the current game board...
     
     player_score = 0
-    return dict(player_score=player_score)
+    return dict(game_board_id=game_board_id)
 
 
 def current_games():
@@ -97,21 +96,29 @@ def current_games():
                 )
 
 
-def past_games():
+def post_game():
     """
+    postgame, show current game and
     have a list of past games that you are involved in
     :return:
     """
-    r = request
-    v = request.get_vars
     value = request.vars
-    # print(value)
-    # handle the variable
-    # redirect(URL('index'), client_side=True)
+    # current_game_board = db.game_board(game_board_id)
+    #<Storage {'id': '1', 'value': '7'}>
 
-    print (r)
-    print (v)
-    return dict(value=value)
+    redirect('past_games')
+
+
+def past_games():
+    """
+    postgame, show current game and
+    have a list of past games that you are involved in
+    :return:
+    """
+
+
+
+    return dict()
 
 
 # TODO: have 'game' screen be in a different controller/view?
